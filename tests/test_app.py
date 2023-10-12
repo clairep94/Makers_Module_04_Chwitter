@@ -37,7 +37,7 @@ def test_landingpage(page, test_web_address):
 
 
 
-# == ALL TWEETS == chwitter.com/home ==
+# == ALL TWEETS, NO LOGIN == chwitter.com/home ==
 '''
 When we go to all tweets
 We should see:
@@ -102,7 +102,7 @@ def test_single_tweet(page, test_web_address):
         "Sign Out"
     ])
 
-    #List of posts
+    #Single Post
 
 
 

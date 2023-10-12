@@ -105,6 +105,11 @@ We should see:
 
 '''
 
+# == CREATE NEW USER ==
+
+# == SIGN IN ==
+
+# == SIGN OUT ==
 
 
 
