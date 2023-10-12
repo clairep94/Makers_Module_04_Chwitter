@@ -1,69 +1,70 @@
-# Flask HTML Web & Database Project Starter
+# Web applications
 
-This is a starter project for you to use to start your Flask HTML web & database
-projects.
+_Coaching this? Read the coach guidance
+[here.](https://github.com/makersacademy/slug/blob/main/materials/universe/distributed_applications/web_applications/HOW_TO_COACH.x.md)_
 
-It contains quite a lot of example code. You can use this to see how the various
-parts of the project work, or you can delete it and start from scratch.
+In this module you will learn to:
+  * Explain how HTTP requests and responses work at a high level
+  * Write integration tests for a web application
+  * Implement web routes using a lightweight web framework
+  * Follow a debugging process for a web application
 
-There are two videos to support:
+## Sequence
 
-* [A demonstration of setting up the project](https://www.youtube.com/watch?v=YStsRfMVx44&t=0s)
-* [A walkthrough of the project codebase](https://www.youtube.com/watch?v=YStsRfMVx44&t=314s) 
+Work through each of these exercises in sequence.
 
-## Setup
+This module is designed to be worked on during a week. Here's a suggested pace — you might
+find you need more (or less) time than this to complete the challenges, and that's OK.
+ * Day 1: HTTP
+ * Days 2 & 3: Flask Challenges
+ * Days 4 & 5: HTML & Jinja
+ * Solo challenge at the end of the week
 
-```shell
-# Clone the repository to your local machine
-; git clone git@github.com:makersacademy/web-applications-in-python-project-starter-html.git YOUR_PROJECT_NAME
+## Phase One: HTTP
 
-# Or, if you don't have SSH keys set up
-; git clone https://github.com/makersacademy/web-applications-in-python-project-starter-html.git YOUR_PROJECT_NAME
+Go through these exercises and learn about the HTTP protocol and the Request and Response
+flow between a client and a server.
 
-# Enter the directory
-; cd YOUR_PROJECT_NAME
+1. [Introduction to HTTP](./http_bites/01_intro_to_http.md)
+2. [Requests and Responses](./http_bites/02_requests_and_responses.md)
+3. [Sending a request with parameters](./http_bites/03_request_parameters.md)
 
-# Install dependencies and set up the virtual environment
-; pipenv install
+## Phase Two: Flask Challenges
 
-# Activate the virtual environment
-; pipenv shell
+Go through these exercises and learn how to set up and gradually build a program which
+exposes a database through HTTP endpoints.
 
-# Install the virtual browser we will use for testing
-; playwright install
-# If you have problems with the above, contact your coach
+Some of these challenges include [Process Feedback
+Challenges](https://github.com/makersacademy/golden-square-in-python/blob/main/pills/process_feedback_challenges.md),
+in which you record yourself performing the task and share it with your coach for
+feedback. These are tagged with a 📡.
 
-# Create a test and development database
-; createdb YOUR_PROJECT_NAME
-; createdb YOUR_PROJECT_NAME_test
+1. [Setting up a Flask project](./challenges/01_setting_up_flask_project.md)
+2. [Building routes](./challenges/02_building_a_route.md)
+3. [Test-driving routes](./challenges/03_test_driving_a_route.md) 📡
+4. [Test-driving routes that interact with a
+   database](./challenges/04_test_driving_route_with_database.md) 📡
 
-# Open lib/database_connection.py and change the database names
-; open lib/database_connection.py
+## Phase Three: Building webpages
 
-# Seed the development database (ensure you have run `pipenv shell` first)
-; python seed_dev_database.py
+1. [Using HTML to create webpages](./html_challenges/01_page_structure.md)
+2. [Using templates to return dynamic HTML](./html_challenges/02_using_templates_dynamic_page.md)
+3. [Using links to send `GET` requests](./html_challenges/03_using_links.md) 📡
+4. [Using forms to send `POST` requests](./html_challenges/04_using_forms.md)
+5. [Debugging a web application](./html_challenges/05_debugging.md)
+6. [Securing your application](./html_challenges/06_securing_user_input.md)
 
-# Run the tests (with extra logging)
-; pytest -sv
+## Phase Four: Solo challenge
 
-# Run the app
-; python app.py
-# Now visit http://localhost:5001/emoji in your browser
-```
+[Work on the Chitter challenge](projects/chitter_challenge.md) and
+open a pull request when you're done.
 
-If you would like to remove the example code:
+## Going further
 
-```shell
-; ./remove_example_code.sh
-```
+This is additional reference material so you can learn to use common features and patterns
+implemented as part of web applications.
 
+1. [Modelling and Planning a Web application](./pills/modelling_and_planning_web_application.md)
+2. [Creating and Authenticating users](./pills/user_authentication.md)
+3. [Loading CSS or static files](./pills/loading_css_or_static_files.md)
 
-<!-- BEGIN GENERATED SECTION DO NOT EDIT -->
-
----
-
-**How was this resource?**  
-[😫](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fweb-applications-in-python-project-starter-html&prefill_File=README.md&prefill_Sentiment=😫) [😕](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fweb-applications-in-python-project-starter-html&prefill_File=README.md&prefill_Sentiment=😕) [😐](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fweb-applications-in-python-project-starter-html&prefill_File=README.md&prefill_Sentiment=😐) [🙂](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fweb-applications-in-python-project-starter-html&prefill_File=README.md&prefill_Sentiment=🙂) [😀](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fweb-applications-in-python-project-starter-html&prefill_File=README.md&prefill_Sentiment=😀)  
-Click an emoji to tell us.
-
-<!-- END GENERATED SECTION DO NOT EDIT -->
