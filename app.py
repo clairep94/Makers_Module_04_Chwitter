@@ -59,7 +59,7 @@ def delete_post(id):
     return redirect(url_for('home'))
 
 
-# == UPVOTE/DOWNVOTE TWEET == page refresh
+# == UPVOTE/DOWNVOTE POST == page refresh
 '''
 When we click upvote or downvote, we upvote or downvote a tweet
 We will refresh the page and see that the number of upvotes/downvotes has increase by 1.
