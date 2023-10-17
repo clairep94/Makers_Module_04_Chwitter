@@ -1,70 +1,111 @@
-# Web applications
+# TWITTER CLONE PROJECT
 
-_Coaching this? Read the coach guidance
-[here.](https://github.com/makersacademy/slug/blob/main/materials/universe/distributed_applications/web_applications/HOW_TO_COACH.x.md)_
+For this project, I am extending the project from the brief here: [Makers Academy Brief](./project_brief.md)
 
-In this module you will learn to:
-  * Explain how HTTP requests and responses work at a high level
-  * Write integration tests for a web application
-  * Implement web routes using a lightweight web framework
-  * Follow a debugging process for a web application
+### DEPENDENCIES:
 
-## Sequence
+See Pipfile
 
-Work through each of these exercises in sequence.
+**Packages**
 
-This module is designed to be worked on during a week. Here's a suggested pace — you might
-find you need more (or less) time than this to complete the challenges, and that's OK.
- * Day 1: HTTP
- * Days 2 & 3: Flask Challenges
- * Days 4 & 5: HTML & Jinja
- * Solo challenge at the end of the week
+* pytest = "*"
+* psycopg = "*"
+* flask = "*"
+* pytest-playwright = "*"
+* pytest-xprocess = "*"
+* py = "*"
+* playwright = "*"
 
-## Phase One: HTTP
+<br>
 
-Go through these exercises and learn about the HTTP protocol and the Request and Response
-flow between a client and a server.
 
-1. [Introduction to HTTP](./http_bites/01_intro_to_http.md)
-2. [Requests and Responses](./http_bites/02_requests_and_responses.md)
-3. [Sending a request with parameters](./http_bites/03_request_parameters.md)
+**Dev-Packages**
 
-## Phase Two: Flask Challenges
+* autopep8 = "*"
 
-Go through these exercises and learn how to set up and gradually build a program which
-exposes a database through HTTP endpoints.
+<br>
 
-Some of these challenges include [Process Feedback
-Challenges](https://github.com/makersacademy/golden-square-in-python/blob/main/pills/process_feedback_challenges.md),
-in which you record yourself performing the task and share it with your coach for
-feedback. These are tagged with a 📡.
+**Requires**
 
-1. [Setting up a Flask project](./challenges/01_setting_up_flask_project.md)
-2. [Building routes](./challenges/02_building_a_route.md)
-3. [Test-driving routes](./challenges/03_test_driving_a_route.md) 📡
-4. [Test-driving routes that interact with a
-   database](./challenges/04_test_driving_route_with_database.md) 📡
+* python_version = "3.11"
 
-## Phase Three: Building webpages
+<br>
+<hr>
+<br>
+I have created the following project design:
 
-1. [Using HTML to create webpages](./html_challenges/01_page_structure.md)
-2. [Using templates to return dynamic HTML](./html_challenges/02_using_templates_dynamic_page.md)
-3. [Using links to send `GET` requests](./html_challenges/03_using_links.md) 📡
-4. [Using forms to send `POST` requests](./html_challenges/04_using_forms.md)
-5. [Debugging a web application](./html_challenges/05_debugging.md)
-6. [Securing your application](./html_challenges/06_securing_user_input.md)
+## ER DIAGRAM:
 
-## Phase Four: Solo challenge
+![ER Diagram for Twitter Clone](./static/twitter_clone_er_diagram.jpg)
 
-[Work on the Chitter challenge](projects/chitter_challenge.md) and
-open a pull request when you're done.
 
-## Going further
+## EXTENDED USER STORIES:
 
-This is additional reference material so you can learn to use common features and patterns
-implemented as part of web applications.
+I would like to have the following extended user stories:
 
-1. [Modelling and Planning a Web application](./pills/modelling_and_planning_web_application.md)
-2. [Creating and Authenticating users](./pills/user_authentication.md)
-3. [Loading CSS or static files](./pills/loading_css_or_static_files.md)
+```
 
+As a user,
+So that I can let others know my thoughts and what I am doing,
+I would like to create posts
+
+As a user,
+So that others can see my post among other posts of similar topics,
+I would like the option to add hashtags to my posts
+
+As a user,
+So I can engage with others,
+I would like users to be able to comment on my posts
+
+As a user,
+So I can navigate posts and users easily,
+I want to see the user's display name and handle above their post or comment
+I would this string to be formatted for readability, and to link to the user's page
+
+As a user,
+So I can keep updated with particular users posts,
+I would like to be able to follow users
+
+As a user,
+So that I can give feedback to a post without commenting,
+I would like to 'Like' posts and comments
+
+As a user,
+So that I can better appreciate the context of a post or comment,
+I want to see what time it was made
+
+As a user,
+So that I can see what others are saying,
+I want to see all posts in reverse chronological order
+
+As a user,
+So that I can see the hottest posts,
+I want to be able to sort posts by Likes in descending order
+
+As a user,
+So that I can see the hottest topics,
+I want to be able to search posts by hashtag
+
+As a user,
+So that I can find another user,
+I want to be able to search users by handle (@username)
+
+As a user,
+So that I can know more about myself and other users,
+I would like to be able to see views for all posts, all comments, and all likes from a specified user
+
+```
+
+## COMPLETED:
+
+* project design & user stories
+* chwitter.sql, reflects project design
+* Started User class & User Repository -- created before project design, need to ammend to reflect new design and write tests.
+* Started routes for app.py & placeholder html templates for landingpage, homepage (all), new_post, show_comment, show_post  -- created before project design, need to ammend to reflect new design and write tests.
+
+## TODO:
+
+* Flask session, and user authentification
+* Post class & Post Repository
+* Comment class and Comment Repository - inherit from Post
+* #Like, #Follow, #Hashtag -- add as methods into User, Post, and Comment repositories
