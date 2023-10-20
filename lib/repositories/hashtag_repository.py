@@ -122,7 +122,28 @@ class HashtagRepository:
             hashtag = Hashtag(row['hashtag_id'], row['title'])
             hashtags.append(hashtag)
         if hashtags == []:
-            return None
+            return None #decide if None or [] is better for later purposes.
         return hashtags
+
+
+    # Find all posts with a certain hashtag -- move to posts?
+    '''
+    We can find a list of all post id's with a certain hashtag
+    If the hashtag doesn't exist, we get None
+    If no posts are attached to the hashtag, we get None
+    '''
+    def find_all_posts_by_hashtag(self, hashtag_string:str) -> None or list[int]:
+        hashtag_id = self.find_id_by_title(hashtag_string)
+        if hashtag_id == None:
+            return None
+        rows = self._connection.execute('SELECT post_id, user_id, content, created_on FROM posts JOIN hashtags_posts ON posts.id = hashtags_posts.post_id WHERE hashtags_posts.hashtag_id = %s', [hashtag_id])
+        posts = []
+        for row in rows:
+            post = row['post_id']
+            #post = Post(row['post_id'], row['user_id], row['content'], row['created_on'])
+            posts.append(post)
+        if posts == []:
+            return None #decide if None or [] is better for later purposes.
+        return posts #decide if list[int] or list[Post] later
 
     # Generate Hashtags function -- create list of hashtags from list of hashtag_ids

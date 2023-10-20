@@ -161,15 +161,19 @@ def test_delete_hashtag_to_post(db_connection):
         Hashtag(3, "shows")
     ]
 
-# TODO Test all_posts_by_hashtag, line 134 in ht_repo after posts is written.
-'''
-When we search for all posts with a hashtag title,
-We see a list of all posts with that hashtag
-'''
-'''
-When we search for all posts with a hashtag title that doesn't exist in the db
-We get 'No results'
-'''
-'''
-If there are no posts with this existing hashtag, we should get None or "" 
-'''
+def test_all_posts_by_hashtag(db_connection):
+    '''
+    When we search for all posts with a hashtag title,
+    We see a list of all posts with that hashtag
+    '''
+    '''
+    When we search for all posts with a hashtag title that doesn't exist in the db
+    We get 'No results'
+    '''
+    '''
+    If there are no posts with this existing hashtag, we should get None or "" 
+    '''
+    db_connection.seed("seeds/chwitter.sql")
+    repository = HashtagRepository(db_connection)
+    assert repository.find_all_posts_by_hashtag(hashtag_string="memes") == [2,3]
+    assert repository.find_all_posts_by_hashtag(hashtag_string="soccer") == None
