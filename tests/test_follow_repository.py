@@ -88,7 +88,6 @@ def test_follow(db_connection):
     When one user follows another, we create a follow event.
     When we call #all, we can see the new follow event in the list of events.
     '''
-    # TODO We can see the new user_ids in the list of follows and following.
     # TODO when we delete a user, we no longer see the user among their follow's followers
     db_connection.seed("seeds/chwitter.sql")
     repository = FollowRepository(db_connection)
@@ -100,13 +99,14 @@ def test_follow(db_connection):
         Follow(3, 2, 3),
         Follow(4, 1, 3)
     ]
+    assert repository.find_all_followers(3) == [2, 1]
+    assert repository.find_all_followings(1) == [3]
 
 def test_unfollow(db_connection):
     '''
     When one user unfollows another, we delete the follow event
     When we call #all, we can see the event has been deleted in the list of events.
     '''
-    # TODO We can no longer see the user_id in the list of follows and following.
     db_connection.seed("seeds/chwitter.sql")
     repository = FollowRepository(db_connection)
 
@@ -136,5 +136,5 @@ def test_find_all_followings(db_connection):
     db_connection.seed("seeds/chwitter.sql")
     repository = FollowRepository(db_connection)
 
-    assert repository.find_all_followings(user_id=3) == [1, 2]
+    assert repository.find_all_followings(user_id=3) == [1, 2] #TODO Change this to User once User Repo complete
 
