@@ -1,22 +1,5 @@
-# Storing the model class in the same file as this model class is simple and to save space.
-class Hashtag:
-    def __init__(self, hashtag_id:int, title:str):
-        self.hashtag_id = hashtag_id
-        self.title = title
-
-    # This method allows our tests to assert that the objects it expects
-    # are the objects we made based on the database records.
-    def __eq__(self, other):
-        return self.__dict__ == other.__dict__
-
-    # This method makes it look nicer when we print an Users
-    def __repr__(self):
-        return f"Hashtag({self.hashtag_id}, {self.title})"
-
-
-#######################################################################
-
-# from lib.post import Post
+from lib.models.post import Post
+from lib.models.hashtag import Hashtag
 
 class HashtagRepository:
     # We initialise with a database connection
@@ -65,7 +48,9 @@ class HashtagRepository:
     We can see it in hashtags.all
     '''
     # Check if the tag field is empty & if not, if the tag already exists:
-    def check_if_new_and_valid(self, new_tag:str) -> bool:
+    # If none, the tag is valid
+    # If not none, generates a list of errors.
+    def check_if_new_and_valid(self, new_tag:str) -> list or None:
         if new_tag == None or new_tag == "":
             return False
         new_tag = new_tag.lower() #all hashtags are lowercase?
@@ -73,6 +58,8 @@ class HashtagRepository:
         if same_entry != None:
             return False
         return True
+
+    # Generate list of errors -TODO
 
     # if check_if_new_and_valid(new_tag):
     def create(self, new_tag:str) -> int:
@@ -119,30 +106,6 @@ class HashtagRepository:
         self._connection.execute('DELETE FROM hashtags_posts WHERE hashtag_id = %s AND post_id = %s', [hashtag_id, post_id])
         return None
 
-    # Search for all posts with a hashtag #TODO -- when posts is written
-    '''
-    When we search for all posts with a hashtag title,
-    We see a list of all posts with that hashtag
-    '''
-    '''
-    When we search for all posts with a hashtag title that doesn't exist in the db
-    We get 'No results'
-    '''
-    '''
-    If there are no posts with this existing hashtag, we should get None or "" 
-    '''
-    # def all_posts_by_hashtag(self, hashtag_title:str) -> None or list[Post]:
-    #     hashtag_id = self.find_id_by_title(title=hashtag_title)
-    #     if hashtag_id == None:
-    #         return None
-    #     rows = self._connection.execute('SELECT posts.id as post_id, posts.user_id, posts.content, posts.created_on FROM posts JOIN tags_posts ON posts.id = tags_posts.post_id WHERE tags_posts.hashtag_id = %s' [hashtag_id])
-    #     posts = []
-    #     for row in rows:
-    #         post = Post(row['post_id'], row['user_id'], row['content'], row['created_on'])
-    #         posts.append(post)
-    #     if posts == []:
-    #         return None
-    #     return posts
 
     # Show all hashtags for one post -- move to posts?
     '''
@@ -152,7 +115,7 @@ class HashtagRepository:
     If there are no hashtags for the post, we should see "" or None
     '''
 
-    def all_hashtags_for_post(self, post_id:int) -> None or list[Hashtag]:
+    def all_for_post(self, post_id:int) -> None or list[Hashtag]:
         rows = self._connection.execute('SELECT hashtags.id as hashtag_id, hashtags.title FROM hashtags JOIN hashtags_posts ON hashtags.id = hashtags_posts.hashtag_id WHERE hashtags_posts.post_id = %s', [post_id])
         hashtags = []
         for row in rows:

@@ -1,4 +1,4 @@
-from lib.hashtag_repository import Hashtag, HashtagRepository
+from lib.repositories.hashtag_repository import Hashtag, HashtagRepository
 
 ## HASHTAG CLASS ###
 
@@ -110,12 +110,12 @@ def test_all_hashtags_for_post(db_connection):
     '''
     db_connection.seed("seeds/chwitter.sql")
     repository = HashtagRepository(db_connection)
-    assert repository.all_hashtags_for_post(post_id=1) == [
+    assert repository.all_for_post(post_id=1) == [
         Hashtag(1, "football"),
         Hashtag(3, "shows")
     ]
     repository.delete(2)
-    assert repository.all_hashtags_for_post(post_id=3) == None
+    assert repository.all_for_post(post_id=3) == None
 
 
 def test_delete_hashtag_effect_on_post(db_connection):
@@ -126,12 +126,12 @@ def test_delete_hashtag_effect_on_post(db_connection):
     db_connection.seed("seeds/chwitter.sql")
     repository = HashtagRepository(db_connection)
 
-    assert repository.all_hashtags_for_post(1) == [
+    assert repository.all_for_post(1) == [
         Hashtag(1, "football"),
         Hashtag(3, "shows")
     ]
     repository.delete(3)
-    assert repository.all_hashtags_for_post(1) == [
+    assert repository.all_for_post(1) == [
         Hashtag(1, "football")
     ]
 
@@ -143,7 +143,7 @@ def test_add_hashtag_to_post(db_connection):
     db_connection.seed("seeds/chwitter.sql")
     repository = HashtagRepository(db_connection)
     repository.add_to_post(hashtag_id=2, post_id=1)
-    assert repository.all_hashtags_for_post(1) == [
+    assert repository.all_for_post(1) == [
         Hashtag(1, "football"),
         Hashtag(2, "memes"),
         Hashtag(3, "shows")
@@ -157,7 +157,7 @@ def test_delete_hashtag_to_post(db_connection):
     db_connection.seed("seeds/chwitter.sql")
     repository = HashtagRepository(db_connection)
     repository.delete_from_post(hashtag_id=1, post_id=1)
-    assert repository.all_hashtags_for_post(1) == [
+    assert repository.all_for_post(1) == [
         Hashtag(3, "shows")
     ]
 
