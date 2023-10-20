@@ -124,3 +124,5 @@ class HashtagRepository:
         if hashtags == []:
             return None
         return hashtags
+
+    # Generate Hashtags function -- create list of hashtags from list of hashtag_ids

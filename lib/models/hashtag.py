@@ -1,4 +1,3 @@
-# Storing the model class in the same file as this model class is simple and to save space.
 class Hashtag:
     def __init__(self, hashtag_id:int, title:str):
         self.hashtag_id = hashtag_id
