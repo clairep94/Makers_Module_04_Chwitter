@@ -6,6 +6,8 @@ class Like:
         self.comment_id = comment_id #none if like is on a post.
     
     def __eq__(self, other):
+        if not isinstance(other, Like):
+            return False
         return self.__dict__ == other.__dict__
     
     def __repr__(self):

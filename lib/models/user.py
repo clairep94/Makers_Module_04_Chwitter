@@ -21,8 +21,11 @@ class User:
     # This method allows our tests to assert that the objects it expects
     # are the objects we made based on the database records.
     def __eq__(self, other):
+        if not isinstance(other, User):
+            return False
+
         return self.__dict__ == other.__dict__
 
     # This method makes it look nicer when we print an Users
     def __repr__(self):
-        return f"User({self.user_id}, {self.name}, {self.handle})"
+        return f"User({self.user_id}, Display Name:{self.name}, Handle: @{self.handle})"

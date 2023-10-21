@@ -5,6 +5,8 @@ class Follow:
         self.followee_id = followee_id
 
     def __eq__(self, other):
+        if not isinstance(other, Follow):
+            return False
         return self.__dict__ == other.__dict__
 
     def __repr__(self):
