@@ -5,7 +5,6 @@ class HashtagRepository:
     def __init__(self, connection):
         self._connection = connection
 
-    
     def generate_hashtags(self, rows) -> list:
         hashtags = []
         for row in rows:
@@ -25,7 +24,9 @@ class HashtagRepository:
         '''
         When we call all, we get all hashtags in our db
         '''
-        rows = self._connection.execute('SELECT * FROM hashtags')
+        query = 'SELECT * FROM hashtags'
+
+        rows = self._connection.execute(query)
         return self.generate_hashtags(rows)
     
     # == FIND HASHTAG ================
@@ -34,7 +35,10 @@ class HashtagRepository:
         '''
         We can find the hashtag by the hashtag_id 
         '''
-        rows = self._connection.execute('SELECT * FROM hashtags WHERE id=%s', [hashtag_id])
+        query = 'SELECT * FROM hashtags WHERE id=%s'
+        params = [hashtag_id]
+        
+        rows = self._connection.execute(query, params)
         return self.generate_single_hashtag(rows)
 
     # Find ID by hashtag title
@@ -43,7 +47,9 @@ class HashtagRepository:
         We can find the hashtag by a potential hashtag title. If it does not exist, we get None.
         '''
         title = title.lower()
-        rows = self._connection.execute('SELECT * FROM hashtags WHERE title=%s', [title])
+        query = 'SELECT * FROM hashtags WHERE title=%s'
+        params = [title]
+        rows = self._connection.execute(query, params)
         return self.generate_single_hashtag(rows)
     
     # == CREATE NEW HASHTAG ============
@@ -53,12 +59,12 @@ class HashtagRepository:
     If it is not, we add it to hashtags
     We can see it in hashtags.all
     '''
-    # Check if the tag field is empty & if not, if the tag already exists:
-    # If none, the tag is valid
-    # If not none, generates a list of errors.
     def check_if_new_and_valid(self, new_tag:str) -> list or None:
+        # check if blank
         if new_tag == None or new_tag == "":
             return False
+        
+        # check for repeat
         new_tag = new_tag.lower() #all hashtags are lowercase
         same_entry = self.find_by_title(new_tag)
         if same_entry == None:
@@ -70,7 +76,10 @@ class HashtagRepository:
     # if check_if_new_and_valid(new_tag):
     def create(self, new_tag:str) -> int:
         new_tag = new_tag.lower()
-        rows = self._connection.execute('INSERT INTO hashtags (title) VALUES (%s) RETURNING id', [new_tag])
+        query = 'INSERT INTO hashtags (title) VALUES (%s) RETURNING id'
+        params = [new_tag]
+
+        rows = self._connection.execute(query, params)
         hashtag_id = rows[0]['id']
         return hashtag_id
     
@@ -87,7 +96,10 @@ class HashtagRepository:
     It should be removed from posts that had this hashtag
     '''
     def delete(self, hashtag_id:int) -> None:
-        self._connection.execute('DELETE FROM hashtags WHERE id = %s', [hashtag_id])
+        query = 'DELETE FROM hashtags WHERE id = %s'
+        params = [hashtag_id]
+
+        self._connection.execute(query, params)
         return None
     
 ########################################################
@@ -95,34 +107,41 @@ class HashtagRepository:
     # == POSTS INTEGRATION ===============
 
     # Add hashtag to post --- MOVE TO POSTS?
-    '''
-    When we add a hashtag to a post
-    We see it in all_hashtags_for_post()
-    '''
     def add_to_post(self, hashtag_id:int, post_id:int) -> None:
-        self._connection.execute('INSERT INTO hashtags_posts (hashtag_id, post_id) VALUES (%s, %s)', [hashtag_id, post_id])
+        '''
+        When we add a hashtag to a post
+        We see it in all_hashtags_for_post()
+        '''
+        query = 'INSERT INTO hashtags_posts (hashtag_id, post_id) VALUES (%s, %s)'
+        params = [hashtag_id, post_id]
+
+        self._connection.execute(query, params)
         return None
     
     # Delete hashtag from post
-    '''
-    When we delete a hashtag from a post
-    We no longer see it in all_hashtags_for_post()
-    '''
     def delete_from_post(self, hashtag_id:int, post_id:int) -> None:
-        self._connection.execute('DELETE FROM hashtags_posts WHERE hashtag_id = %s AND post_id = %s', [hashtag_id, post_id])
+        '''
+        When we delete a hashtag from a post
+        We no longer see it in all_hashtags_for_post()
+        '''
+        query = 'DELETE FROM hashtags_posts WHERE hashtag_id = %s AND post_id = %s'
+        params = [hashtag_id, post_id]
+
+        self._connection.execute(query, params)
         return None
 
 
     # Show all hashtags for one post -- move to posts?
-    '''
-    We can find a list of all hashtags for a post
-    '''
-    '''
-    If there are no hashtags for the post, we should see "" or None
-    '''
 
     def all_for_post(self, post_id:int) -> list[Hashtag]:
-        rows = self._connection.execute('SELECT hashtags.id, hashtags.title FROM hashtags JOIN hashtags_posts ON hashtags.id = hashtags_posts.hashtag_id WHERE hashtags_posts.post_id = %s', [post_id])
+        '''
+        We can find a list of all hashtags for a post
+        If there are no hashtags for the post, we should see an empty list
+        '''
+        query = 'SELECT hashtags.id, hashtags.title FROM hashtags JOIN hashtags_posts ON hashtags.id = hashtags_posts.hashtag_id WHERE hashtags_posts.post_id = %s'
+        params = [post_id]
+
+        rows = self._connection.execute(query, params)
         return self.generate_hashtags(rows)
 
 
