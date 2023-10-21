@@ -13,6 +13,8 @@ class PostRepository:
         return posts
 
     def generate_single_post(self, rows) -> Post:
+        if rows == []:
+            return None
         row = rows[0]
         return Post(row['id'], row['user_id'], row['content'], row['created_on'])
 
