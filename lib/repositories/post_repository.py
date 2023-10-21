@@ -114,7 +114,7 @@ class PostRepository:
         We can find all posts by a user
         '''
         params = [user_id]
-        query = 'SELECT id, user_id, content, created_on FROM posts WHERE user_id =%s'
+        query = 'SELECT * FROM posts WHERE user_id =%s'
 
         rows = self._connection.execute(query, params)
         return self.generate_posts(rows)
