@@ -40,15 +40,15 @@ def test_find_by_id(db_connection):
     hashtag = repository.find_by_id(hashtag_id=3)
     assert hashtag == Hashtag(3, "shows")
 
-def test_find_id_by_title(db_connection):
+def test_find_by_title(db_connection):
     '''
     We can find the hashtag_id by a potential hashtag title. If it does not exist, we get None.
     '''
     db_connection.seed("seeds/chwitter.sql")
     repository = HashtagRepository(db_connection)
 
-    assert repository.find_id_by_title("Shows") == 3
-    assert repository.find_id_by_title("baseball") == None
+    assert repository.find_by_title("Shows") == Hashtag(3, "shows")
+    assert repository.find_by_title("baseball") == None
 
 def test_check_if_new_and_valid(db_connection):
     '''
@@ -115,7 +115,7 @@ def test_all_hashtags_for_post(db_connection):
         Hashtag(3, "shows")
     ]
     repository.delete(2)
-    assert repository.all_for_post(post_id=3) == None
+    assert repository.all_for_post(post_id=3) == []
 
 
 def test_delete_hashtag_effect_on_post(db_connection):
@@ -160,20 +160,3 @@ def test_delete_hashtag_to_post(db_connection):
     assert repository.all_for_post(1) == [
         Hashtag(3, "shows")
     ]
-
-def test_all_posts_by_hashtag(db_connection):
-    '''
-    When we search for all posts with a hashtag title,
-    We see a list of all posts with that hashtag
-    '''
-    '''
-    When we search for all posts with a hashtag title that doesn't exist in the db
-    We get 'No results'
-    '''
-    '''
-    If there are no posts with this existing hashtag, we should get None or "" 
-    '''
-    db_connection.seed("seeds/chwitter.sql")
-    repository = HashtagRepository(db_connection)
-    assert repository.find_all_posts_by_hashtag(hashtag_string="memes") == [2,3]
-    assert repository.find_all_posts_by_hashtag(hashtag_string="soccer") == None

@@ -1,45 +1,51 @@
-from lib.models.post import Post
 from lib.models.hashtag import Hashtag
 
 class HashtagRepository:
     # We initialise with a database connection
     def __init__(self, connection):
         self._connection = connection
+
     
-    # == ALL HASHTAGS ================
-    '''
-    When we call all, we get all hashtags in our db
-    '''
-    def all(self) -> list[Hashtag]:
-        rows = self._connection.execute('SELECT * FROM hashtags')
+    def generate_hashtags(self, rows) -> list:
         hashtags = []
         for row in rows:
             hashtag = Hashtag(row['id'], row['title'])
             hashtags.append(hashtag)
         return hashtags
     
-    # == FIND HASHTAG ================
-    # Find hashtag by ID
-    '''
-    We can find the hashtag by the hashtag_id 
-    '''
-    def find_by_id(self, hashtag_id:int) -> Hashtag:
-        rows = self._connection.execute('SELECT * FROM hashtags WHERE id=%s', [hashtag_id])
-        row = rows[0]
-        return Hashtag(row['id'], row['title'])
-
-    # Find ID by hashtag title
-    '''
-    We can find the hashtag_id by a potential hashtag title. If it does not exist, we get None.
-    '''
-    def find_id_by_title(self, title:str) -> int or None:
-        title = title.lower()
-        rows = self._connection.execute('SELECT * FROM hashtags WHERE title=%s', [title])
+    def generate_single_hashtag(self, rows) -> Hashtag:
         if rows == []:
             return None
         row = rows[0]
-        return row['id']
+        return Hashtag(row['id'], row['title'])
+    
+    # == ALL HASHTAGS ================
+    # all hashtags
+    def all(self) -> list[Hashtag]:
+        '''
+        When we call all, we get all hashtags in our db
+        '''
+        rows = self._connection.execute('SELECT * FROM hashtags')
+        return self.generate_hashtags(rows)
+    
+    # == FIND HASHTAG ================
+    # Find hashtag by ID
+    def find_by_id(self, hashtag_id:int) -> Hashtag:
+        '''
+        We can find the hashtag by the hashtag_id 
+        '''
+        rows = self._connection.execute('SELECT * FROM hashtags WHERE id=%s', [hashtag_id])
+        return self.generate_single_hashtag(rows)
 
+    # Find ID by hashtag title
+    def find_by_title(self, title:str) -> Hashtag:
+        '''
+        We can find the hashtag by a potential hashtag title. If it does not exist, we get None.
+        '''
+        title = title.lower()
+        rows = self._connection.execute('SELECT * FROM hashtags WHERE title=%s', [title])
+        return self.generate_single_hashtag(rows)
+    
     # == CREATE NEW HASHTAG ============
     '''
     When we have the user creates a post with a non-empty hashtag entry
@@ -53,11 +59,11 @@ class HashtagRepository:
     def check_if_new_and_valid(self, new_tag:str) -> list or None:
         if new_tag == None or new_tag == "":
             return False
-        new_tag = new_tag.lower() #all hashtags are lowercase?
-        same_entry = self.find_id_by_title(new_tag)
-        if same_entry != None:
-            return False
-        return True
+        new_tag = new_tag.lower() #all hashtags are lowercase
+        same_entry = self.find_by_title(new_tag)
+        if same_entry == None:
+            return True
+        return False
 
     # Generate list of errors -TODO
 
@@ -88,7 +94,7 @@ class HashtagRepository:
 
     # == POSTS INTEGRATION ===============
 
-    # Add hashtag to post
+    # Add hashtag to post --- MOVE TO POSTS?
     '''
     When we add a hashtag to a post
     We see it in all_hashtags_for_post()
@@ -115,35 +121,9 @@ class HashtagRepository:
     If there are no hashtags for the post, we should see "" or None
     '''
 
-    def all_for_post(self, post_id:int) -> None or list[Hashtag]:
-        rows = self._connection.execute('SELECT hashtags.id as hashtag_id, hashtags.title FROM hashtags JOIN hashtags_posts ON hashtags.id = hashtags_posts.hashtag_id WHERE hashtags_posts.post_id = %s', [post_id])
-        hashtags = []
-        for row in rows:
-            hashtag = Hashtag(row['hashtag_id'], row['title'])
-            hashtags.append(hashtag)
-        if hashtags == []:
-            return None #decide if None or [] is better for later purposes.
-        return hashtags
+    def all_for_post(self, post_id:int) -> list[Hashtag]:
+        rows = self._connection.execute('SELECT hashtags.id, hashtags.title FROM hashtags JOIN hashtags_posts ON hashtags.id = hashtags_posts.hashtag_id WHERE hashtags_posts.post_id = %s', [post_id])
+        return self.generate_hashtags(rows)
 
-
-    # Find all posts with a certain hashtag -- move to posts?
-    '''
-    We can find a list of all post id's with a certain hashtag
-    If the hashtag doesn't exist, we get None
-    If no posts are attached to the hashtag, we get None
-    '''
-    def find_all_posts_by_hashtag(self, hashtag_string:str) -> None or list[int]:
-        hashtag_id = self.find_id_by_title(hashtag_string)
-        if hashtag_id == None:
-            return None
-        rows = self._connection.execute('SELECT post_id, user_id, content, created_on FROM posts JOIN hashtags_posts ON posts.id = hashtags_posts.post_id WHERE hashtags_posts.hashtag_id = %s', [hashtag_id])
-        posts = []
-        for row in rows:
-            post = row['post_id']
-            #post = Post(row['post_id'], row['user_id], row['content'], row['created_on'])
-            posts.append(post)
-        if posts == []:
-            return None #decide if None or [] is better for later purposes.
-        return posts #decide if list[int] or list[Post] later
 
     # Generate Hashtags function -- create list of hashtags from list of hashtag_ids
