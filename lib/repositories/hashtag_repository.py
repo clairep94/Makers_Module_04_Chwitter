@@ -132,7 +132,6 @@ class HashtagRepository:
 
 
     # Show all hashtags for one post -- move to posts?
-
     def all_for_post(self, post_id:int) -> list[Hashtag]:
         '''
         We can find a list of all hashtags for a post
@@ -144,5 +143,3 @@ class HashtagRepository:
         rows = self._connection.execute(query, params)
         return self.generate_hashtags(rows)
 
-
-    # Generate Hashtags function -- create list of hashtags from list of hashtag_ids

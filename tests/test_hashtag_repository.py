@@ -16,6 +16,8 @@ def test_hashtag_repr():
 
 ## HASHTAG REPO UNIT ##########
 
+# == ALL HASHTAGS ================
+
 def test_get_all_hashtags(db_connection):
     '''
     When we call all, we get all hashtags in our db
@@ -29,6 +31,8 @@ def test_get_all_hashtags(db_connection):
         Hashtag(2, "memes"),
         Hashtag(3, "shows")
     ]
+
+# == FIND HASHTAG ================
 
 def test_find_by_id(db_connection):
     '''
@@ -49,6 +53,8 @@ def test_find_by_title(db_connection):
 
     assert repository.find_by_title("Shows") == Hashtag(3, "shows")
     assert repository.find_by_title("baseball") == None
+
+# == CREATE NEW HASHTAG ============
 
 def test_check_if_new_and_valid(db_connection):
     '''
@@ -82,6 +88,8 @@ def test_create_new_hashtag(db_connection):
         Hashtag(4, "baseball")
     ]
 
+# == DELETE A HASHTAG ===============
+
 def test_delete_hashtag(db_connection):
     '''
     When we delete a hashtag,
@@ -95,28 +103,6 @@ def test_delete_hashtag(db_connection):
         Hashtag(1, "football"),
         Hashtag(2, "memes")
     ]
-
-
-##############################################
-
-## HASHTAG REPO / POST REPO INTEGRATION ##########
-
-def test_all_hashtags_for_post(db_connection):
-    '''
-    We can find a list of all hashtags for a post
-    '''
-    '''
-    If there are no hashtags for the post, we should see "" or None
-    '''
-    db_connection.seed("seeds/chwitter.sql")
-    repository = HashtagRepository(db_connection)
-    assert repository.all_for_post(post_id=1) == [
-        Hashtag(1, "football"),
-        Hashtag(3, "shows")
-    ]
-    repository.delete(2)
-    assert repository.all_for_post(post_id=3) == []
-
 
 def test_delete_hashtag_effect_on_post(db_connection):
     '''
@@ -135,13 +121,37 @@ def test_delete_hashtag_effect_on_post(db_connection):
         Hashtag(1, "football")
     ]
 
+
+##############################################
+
+## HASHTAG REPO / POST REPO INTEGRATION ##########
+
+# All hashtags for a post
+def test_all_hashtags_for_post(db_connection):
+    '''
+    We can find a list of all hashtags for a post
+    '''
+    '''
+    If there are no hashtags for the post, we should see "" or None
+    '''
+    db_connection.seed("seeds/chwitter.sql")
+    repository = HashtagRepository(db_connection)
+    assert repository.all_for_post(post_id=1) == [
+        Hashtag(1, "football"),
+        Hashtag(3, "shows")
+    ]
+    repository.delete(2)
+    assert repository.all_for_post(post_id=3) == []
+
+
+# Add hashtag to post --- MOVE TO POSTS?
 def test_add_hashtag_to_post(db_connection):
     '''
     When we add a hashtag to a post
     We see it in all_hashtags_for_post()
     '''
     db_connection.seed("seeds/chwitter.sql")
-    repository = HashtagRepository(db_connection)
+    repository = HashtgitagRepository(db_connection)
     repository.add_to_post(hashtag_id=2, post_id=1)
     assert repository.all_for_post(1) == [
         Hashtag(1, "football"),
@@ -149,6 +159,7 @@ def test_add_hashtag_to_post(db_connection):
         Hashtag(3, "shows")
     ]
 
+# Delete hashtag from post
 def test_delete_hashtag_to_post(db_connection):
     '''
     When we delete a hashtag from a post
