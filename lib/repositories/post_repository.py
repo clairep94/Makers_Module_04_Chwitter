@@ -109,7 +109,7 @@ class PostRepository:
     ## ============================================================================ ##
 
     # ========= USER ======================
-    def find_all_posts_by_user(self, user_id):
+    def find_all_by_user(self, user_id):
         '''
         We can find all posts by a user
         '''
@@ -127,6 +127,7 @@ class PostRepository:
     # ========= LIKES ======================
     # find_all_likes_for_post(post_id) --> like_repository
 
+    # TODO This currently does not count 0's for no likes. FIX
     # sort posts by likes 
     def sort_by_likes(self, post_list, most_popular=True) -> dict: #TODO: figure out output type after trying integration depending on usage.
         '''
@@ -134,6 +135,12 @@ class PostRepository:
         '''
         params = [post.post_id for post in post_list] #[1,2,3]
         params_placeholders = ", ".join(["%s"] * len(params)) #(%s, %s, %s)        
+
+#         view_query = 'CREATE OR REPLACE VIEW PostLikesCount AS like.id as like_id, COALESCE(COUNT(like.id), 0) AS likes_count FROM posts LEFT JOIN likes on post.id = like.post_id GROUP BY post.id'
+
+#         # Create a join table with post_id and likes_count where post_id is in the post_ids list.
+#         query = f"SELECT comments.*, COALESCE(CommentLikesCount.likes_count, 0) AS likes_count FROM comments LEFT JOIN CommentLikesCount ON comments.id = CommentLikesCount.comment_id WHERE ;
+# "
 
         # Create a join table with post_id and likes_count where post_id is in the post_ids list.
         query = f"SELECT post_id, COUNT(*) AS likes_count FROM likes WHERE post_id IN ({params_placeholders}) GROUP BY post_id"
@@ -151,6 +158,9 @@ class PostRepository:
         else:
             return ascending_likes #least popular to most popular.
 
+    def unlike(self, event_id) -> None: #copied from Like Repo, just using to test sort_by_likes ability to handle posts with no likes.
+        self._connection.execute('DELETE FROM likes WHERE id=%s', [event_id])
+        return None
 
 
     # ========= ADDITIONAL FIND BY ================= 

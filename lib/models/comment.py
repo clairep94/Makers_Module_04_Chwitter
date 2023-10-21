@@ -1,9 +1,12 @@
 from lib.models.post import Post
 
 class Comment(Post):
-    def __init__(self, comment_id, post_id: int, user_id: int, content: str, created_on) -> None:
+    def __init__(self, comment_id:int, post_id: int, user_id: int, content: str, created_on) -> None:
         self.comment_id = comment_id
-        Post.__init__(post_id, user_id, content, created_on)
+        self.post_id = post_id
+        self.user_id = user_id
+        self.content = content
+        self.created_on = created_on
     
     def __eq__(self, other):
         if not isinstance(other, Comment):

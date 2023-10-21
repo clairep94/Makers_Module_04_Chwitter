@@ -101,7 +101,7 @@ def test_delete(db_connection):
         Post(2, 1, '"football" not "soccer", tyvm', datetime(2023, 10, 17, 10, 30, 0)),
         Post(3, 2, "I am once again asking for your financial support", datetime(2023, 10, 17, 11, 9, 0))
     ]
-    assert repository.find_all_posts_by_user(1) == [
+    assert repository.find_all_by_user(1) == [
         Post(2, 1, '"football" not "soccer", tyvm', datetime(2023, 10, 17, 10, 30, 0))
     ]
 
@@ -135,7 +135,7 @@ def test_all_posts_by_user(db_connection):
     db_connection.seed("seeds/chwitter.sql")
     repository = PostRepository(db_connection)
 
-    assert repository.find_all_posts_by_user(1) == [
+    assert repository.find_all_by_user(1) == [
         Post(1, 1, "Has anyone seen the new David Beckham series?", datetime(2023,10,16,12,30,0)),
         Post(2, 1, '"football" not "soccer", tyvm', datetime(2023, 10, 17, 10, 30, 0))
     ]
@@ -164,4 +164,9 @@ def test_sort_by_likes(db_connection):
         {"post": Post(1, 1, "Has anyone seen the new David Beckham series?", datetime(2023,10,16,12,30,0)), "likes_count": 1},
         {"post": Post(2, 1, '"football" not "soccer", tyvm', datetime(2023, 10, 17, 10, 30, 0)), "likes_count": 2}
     ]
-
+    repository.unlike(1) #user 3 liked post 1
+    assert repository.sort_by_likes(repository.all()) == [
+        {"post": Post(2, 1, '"football" not "soccer", tyvm', datetime(2023, 10, 17, 10, 30, 0)), "likes_count": 2},
+        {"post": Post(3, 2, "I am once again asking for your financial support", datetime(2023, 10, 17, 11, 9, 0)), "likes_count": 1},
+        {"post": Post(1, 1, "Has anyone seen the new David Beckham series?", datetime(2023,10,16,12,30,0)), "likes_count": 0}        
+    ]
