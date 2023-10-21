@@ -84,6 +84,29 @@ def test_create(db_connection):
         Post(4, 1, "new content", datetime(2023, 10, 21, 12, 52, 0))
     ]
 
+# === DELETE ========== #
+def test_delete(db_connection):
+    '''
+    When we delete a post
+    We will no longer see it in all posts
+    We will no longer see it in the user's posts
+    ** We will no longer see its comments in all comments 
+    ** We will no longer see the comments in their respective poster's comments    
+    '''
+    db_connection.seed("seeds/chwitter.sql")
+    repository = PostRepository(db_connection)
+
+    repository.delete(1)
+    assert repository.all() == [
+        Post(2, 1, '"football" not "soccer", tyvm', datetime(2023, 10, 17, 10, 30, 0)),
+        Post(3, 2, "I am once again asking for your financial support", datetime(2023, 10, 17, 11, 9, 0))
+    ]
+    assert repository.find_all_posts_by_user(1) == [
+        Post(2, 1, '"football" not "soccer", tyvm', datetime(2023, 10, 17, 10, 30, 0))
+    ]
+
+
+
 # === SORT BY ========== #
 def test_sort_by_descending_date(db_connection):
     '''
@@ -97,6 +120,30 @@ def test_sort_by_descending_date(db_connection):
         Post(2, 1, '"football" not "soccer", tyvm', datetime(2023, 10, 17, 10, 30, 0)),
         Post(1, 1, "Has anyone seen the new David Beckham series?", datetime(2023,10,16,12,30,0))
     ]
+
+
+
+## ============================================================================ ##
+## ======== INTEGRATION ======================================================= ##
+## ============================================================================ ##
+
+# ========= USER ======================
+def test_all_posts_by_user(db_connection):
+    '''
+    We can find all posts by a user
+    '''
+    db_connection.seed("seeds/chwitter.sql")
+    repository = PostRepository(db_connection)
+
+    assert repository.find_all_posts_by_user(1) == [
+        Post(1, 1, "Has anyone seen the new David Beckham series?", datetime(2023,10,16,12,30,0)),
+        Post(2, 1, '"football" not "soccer", tyvm', datetime(2023, 10, 17, 10, 30, 0))
+    ]
+
+
+
+
+# ========= LIKES ======================
 
 def test_sort_by_likes(db_connection):
     '''
@@ -117,3 +164,4 @@ def test_sort_by_likes(db_connection):
         {"post": Post(1, 1, "Has anyone seen the new David Beckham series?", datetime(2023,10,16,12,30,0)), "likes_count": 1},
         {"post": Post(2, 1, '"football" not "soccer", tyvm', datetime(2023, 10, 17, 10, 30, 0)), "likes_count": 2}
     ]
+
