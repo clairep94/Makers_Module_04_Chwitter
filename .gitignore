@@ -3,3 +3,12 @@ __pycache__
 .pytest_cache
 screenshot.png
 .DS_Store
+
+.env
+.venv
+env/
+venv/
+ENV/
+*.env/venv/
+env.bak/
+venv.bak/

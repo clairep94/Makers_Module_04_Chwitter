@@ -1,5 +1,11 @@
 # Notes for Refactoring & Caching:
 
+Currently storing all methods where the output is a list of that object class.
+eg. get_all_likes_for_post is in LikeRepository, not PostRepository.
+Storing in the 'many' end of the relationship
+
+Currently prioritising minimising number of SQL queries -- will change to code-readability and code-refactoring if advised
+
 ## REFACTORING:
 
 Future fork -- refactor post & comment to inherit from UserContent; refactor like & follow to inheriy from UserEvent
