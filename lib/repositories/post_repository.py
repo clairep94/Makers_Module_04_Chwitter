@@ -123,6 +123,14 @@ class PostRepository:
     # ========= COMMENTS ======================
     # find_all_comments_for_post(post_id) --> comment_repository
 
+    # ========= HASHTAGS ======================
+    def generate_hashtags(self, content):
+        '''
+        We can search through the content of a post when it is created and generate hashtags -- strings starting with #, separated by whitespace
+        '''
+        content_list = content.split(" ")
+        hashtags_list = [word[1:] for word in content_list if word[0] == "#" and word != "#"]
+        return hashtags_list
 
     # ========= LIKES ======================
     # find_all_likes_for_post(post_id) --> like_repository
