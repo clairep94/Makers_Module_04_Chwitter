@@ -141,6 +141,19 @@ def test_all_posts_by_user(db_connection):
     ]
 
 
+# ========= HASHTAGS ===================
+def test_generate_hashtags(db_connection):
+    '''
+    We can search through the content of a post when it is created and generate hashtags -- strings starting with #, separated by whitespace
+    '''
+    db_connection.seed("seeds/chwitter.sql")
+    repository = PostRepository(db_connection)
+
+    assert repository.generate_hashtags("test content no hashtags") == []
+    assert repository.generate_hashtags("# # # #actual hastag") == ["actual"] 
+    assert repository.generate_hashtags("Another example of a #hashtag and a non#hashtag and another #tag") == ["hashtag", "tag"]
+
+
 
 
 # ========= LIKES ======================
