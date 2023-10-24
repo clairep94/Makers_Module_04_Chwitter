@@ -151,7 +151,7 @@ def test_add_hashtag_to_post(db_connection):
     We see it in all_hashtags_for_post()
     '''
     db_connection.seed("seeds/chwitter.sql")
-    repository = HashtgitagRepository(db_connection)
+    repository = HashtagRepository(db_connection)
     repository.add_to_post(hashtag_id=2, post_id=1)
     assert repository.all_for_post(1) == [
         Hashtag(1, "football"),

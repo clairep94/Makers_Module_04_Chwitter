@@ -59,34 +59,3 @@ class FollowRepository:
         # Same as delete() for a basic crud app, but we are calling the method by the colloquial term for easy comprehension
         self._connection.execute('DELETE FROM follows WHERE follower_id=%s AND followee_id=%s', [follower_id, followee_id]) #we can do this instead of follow_event_id because users can only follow another user once.
         return None
-
-    # ======== USER INTEGRATION =======================================
-    # if returning list of id's, then no need to integrate
-
-    # == FIND ALL FOLLOWERS FOR USER ================ #TODO move or refer to Users?
-    # all followers that a user has
-    def find_all_followers(self, user_id): #TODO-> [User]: #return list of user_id's or Users?
-        rows = self._connection.execute('SELECT users.id, users.email, users.password, users.handle, users.name, users.joined_on FROM users JOIN follows ON users.id = follows.follower_id WHERE follows.followee_id =%s', [user_id])
-        users = []
-        for row in rows:
-            user = row['id']
-            # user = User(row['id'], row['email'], row['password'], row['handle'], row['name'], row['joined_on'])
-            users.append(user)
-        return users
-
-    # == FIND ALL FOLLOWING FOR USER ================ #TODO move or refer to Users?
-    # all users that follow this user
-    def find_all_followings(self, user_id): # TODO-> [User]: #return list of user_id's or Users?
-        rows = self._connection.execute('SELECT users.id, users.email, users.password, users.handle, users.name, users.joined_on FROM users JOIN follows ON users.id = follows.followee_id WHERE follows.follower_id =%s', [user_id])
-        users = []
-        for row in rows:
-            user = row['id']
-            # user = User(row['id'], row['email'], row['password'], row['handle'], row['name'], row['joined_on'])
-            users.append(user)
-        return users
-
-
-
-
-
-

@@ -1,5 +1,7 @@
 from lib.models.follow import Follow
 from lib.repositories.follow_repository import FollowRepository, User
+from lib.repositories.user_repository import UserRepository
+from datetime import datetime
 
 ## FOLLOW CLASS ###
 
@@ -99,8 +101,12 @@ def test_follow(db_connection):
         Follow(3, 2, 3),
         Follow(4, 1, 3)
     ]
-    assert repository.find_all_followers(3) == [2, 1]
-    assert repository.find_all_followings(1) == [3]
+    user_repository = UserRepository(db_connection)
+    assert user_repository.find_all_followers_of_user(3) == [
+        User(2, "bernie_email@gmail.com", "feeltheBern12#", "BernieSanders", "Bernie Sanders", datetime(2013, 9, 22)),
+        User(1, "fifa_email@gmail.com", "davidBeckam00@", "FIFAcom", "FIFA", datetime(2015,7,28))
+        ]
+    assert user_repository.find_all_follows_by_user(1) == [User(3, "aoc_email@gmail.com", "1234567890a0C", "AOC", "Alexandria Ocasio-Cortez", datetime(2017, 6, 1))]
 
 def test_unfollow(db_connection):
     '''
@@ -115,26 +121,6 @@ def test_unfollow(db_connection):
         Follow(1, 3, 1),
         Follow(3, 2, 3)
     ]
-    assert repository.find_all_followers(2) == []
-    assert repository.find_all_followings(3) == [1]
-
-def test_find_all_followers(db_connection):
-    '''
-    We can see a list all User objects for users that follow the user in question
-    '''
-    db_connection.seed("seeds/chwitter.sql")
-    repository = FollowRepository(db_connection)
-
-    assert repository.find_all_followers(user_id=1) == [3] #TODO Change this to User once User Repo complete
-
-
-
-def test_find_all_followings(db_connection):
-    '''
-    We can see a list all User objects for users that user in question is following
-    '''
-    db_connection.seed("seeds/chwitter.sql")
-    repository = FollowRepository(db_connection)
-
-    assert repository.find_all_followings(user_id=3) == [1, 2] #TODO Change this to User once User Repo complete
-
+    user_repository = UserRepository(db_connection)
+    assert user_repository.find_all_followers_of_user(2) == []
+    assert user_repository.find_all_follows_by_user(3) == [User(1, "fifa_email@gmail.com", "davidBeckam00@", "FIFAcom", "FIFA", datetime(2015,7,28))]
