@@ -147,7 +147,7 @@ class UserRepository:
 
     # Find all users who like this comment
     def find_who_liked_comment(self, comment_id):
-        query = 'SELECT users.id, users.email, users.password, users.handle, users.name, users.joined_on FROM users JOIN likes on user.id = likes.user_id WHERE comment_id =%s'
+        query = 'SELECT users.id, users.email, users.password, users.handle, users.name, users.joined_on FROM users JOIN likes on users.id = likes.user_id WHERE comment_id =%s'
         params = [comment_id]
         rows = self._connection.execute(query,params)
         return self.generate_users(rows)

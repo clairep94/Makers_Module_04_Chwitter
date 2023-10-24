@@ -112,3 +112,10 @@ def test_find_who_liked_post(db_connection):
         User(2, "bernie_email@gmail.com", "feeltheBern12#", "BernieSanders", "Bernie Sanders", datetime(2013, 9, 22)),        
         User(3, "aoc_email@gmail.com", "1234567890a0C", "AOC", "Alexandria Ocasio-Cortez", datetime(2017, 6, 1))
         ]
+    
+def test_find_who_liked_comment(db_connection):
+    db_connection.seed("seeds/chwitter.sql")
+    repository = UserRepository(db_connection)
+
+    assert repository.find_who_liked_comment(1) == []
+    assert repository.find_who_liked_comment(3) == [User(2, "bernie_email@gmail.com", "feeltheBern12#", "BernieSanders", "Bernie Sanders", datetime(2013, 9, 22))]
